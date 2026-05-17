@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../domain/enums/mood_type.dart';
-import '../constants/mood_colors.dart';
+import '../../../../constants/mood_colors.dart';
 
 class MoodFacePainter extends CustomPainter {
   final MoodType mood;

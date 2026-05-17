@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mood_tracker/features/mood_tracker/presentation/constants/mood_colors.dart';
+import 'package:mood_tracker/constants/mood_colors.dart';
+import 'package:mood_tracker/features/mood_tracker/presentation/screens/mood_tracker_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MoodTrackerApp()));
@@ -19,10 +20,7 @@ class MoodTrackerApp extends StatelessWidget {
         colorSchemeSeed: Colors.indigo,
         scaffoldBackgroundColor: MoodColors.scaffoldBackground,
       ),
-      home: const Scaffold(body: Column(children: [
-            
-          ],
-        )),
+      home: MoodTrackerScreen(),
     );
   }
 }
