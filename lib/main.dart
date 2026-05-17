@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mood_tracker/features/mood_tracker/domain/constants/mood_colors.dart';
+import 'package:mood_tracker/features/mood_tracker/presentation/constants/mood_colors.dart';
 
 void main() {
   runApp(const ProviderScope(child: MoodTrackerApp()));

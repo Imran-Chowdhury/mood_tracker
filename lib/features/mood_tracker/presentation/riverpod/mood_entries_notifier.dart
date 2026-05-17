@@ -12,7 +12,6 @@ class MoodNotifier extends AsyncNotifier<List<MoodEntry>> {
 
   Future<void> addEntry(MoodType mood) async {
     final entry = MoodEntry(
-      // Using timestamp as ID; replace with uuid package in production.
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       mood: mood,
       date: DateTime.now(),
