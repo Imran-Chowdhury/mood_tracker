@@ -19,12 +19,13 @@ abstract final class MoodSizes {
   static const int gridColumnsDesktop = 4;
 
   // ── History strip ──────────────────────────────────────────────────────────
-  static const double historyStripHeight = 190.0;
+  static const double mobileHistoryStripHeight = 190.0;
+  static const double desktopHistoryStripHeight = 240.0;
   static const double entryCardSpacing = 14.0;
   static const double mobileEntryCardWidth = 120.0;
-  static const double desktopEntryCardWidth = 140.0;
+  static const double desktopEntryCardWidth = 175.0;
   static const double mobileFaceSize = 68.0;
-  static const double desktopFaceSize = 80.0;
+  static const double desktopFaceSize = 108.0;
 
   // ── Shared card decoration ─────────────────────────────────────────────────
   static const double cardBorderRadius = 20.0;

@@ -152,7 +152,9 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
 
                     // ── History strip ────────────────────────────────────────
                     SizedBox(
-                      height: MoodSizes.historyStripHeight,
+                      height: isMobile
+                          ? MoodSizes.mobileHistoryStripHeight
+                          : MoodSizes.desktopHistoryStripHeight,
                       child: MoodHistoryList(
                         entries: entries,
                         isMobile: isMobile,
