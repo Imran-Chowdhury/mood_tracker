@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 abstract final class MoodColors {
   // ── Mood label / border tints ──────────────────────────────────────────────
-  static const Color happy = Color(0xFF4CAF50);
-  static const Color neutral = Color(0xFFFFB300);
+  static const Color happy = Color(0xFFFFB300);
+  static const Color neutral = Color(0xFF4CAF50);
   static const Color sad = Color(0xFF5C6BC0);
   static const Color angry = Color(0xFFB5513A);
 

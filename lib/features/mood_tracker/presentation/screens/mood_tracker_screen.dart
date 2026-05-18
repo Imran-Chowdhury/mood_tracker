@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mood_tracker/constants/mood_sizes.dart';
+import 'package:mood_tracker/features/mood_tracker/domain/enums/mood_type.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/riverpod/mood_entries_notifier.dart';
+import 'package:mood_tracker/features/mood_tracker/presentation/widgets/history_header.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/widgets/mood_history_list.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/widgets/mood_selector_card.dart';
 
-import '../../domain/enums/mood_type.dart';
-import '../../../../constants/mood_sizes.dart';
-
-/// Root screen for the mood tracker feature.
-///
-/// State responsibilities:
-/// - [_animatedIndexNotifier] — local UI state (which entry card is animating).
-///   Lives here as a [ValueNotifier] so that mutations only rebuild the
-///   individual [MoodEntryCard] that subscribed, not this whole screen.
-/// - Entry list — owned by [MoodEntriesNotifier] via Riverpod.
-///   [ref.watch] here triggers a screen rebuild only when the entry list
-///   itself changes (add / remove), not on animation events.
 class MoodTrackerScreen extends ConsumerStatefulWidget {
   const MoodTrackerScreen({super.key});
 
@@ -24,9 +15,6 @@ class MoodTrackerScreen extends ConsumerStatefulWidget {
 }
 
 class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
-  /// Tracks which history-card index is currently animating.
-  /// [ValueNotifier] instead of setState: mutating this does NOT rebuild the
-  /// screen — only the [ValueListenableBuilder] inside the targeted card.
   final ValueNotifier<int?> _animatedIndexNotifier = ValueNotifier<int?>(null);
 
   @override
@@ -56,10 +44,6 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
     final hPad = isMobile
         ? MoodSizes.pagePaddingMobile
         : MoodSizes.pagePaddingDesktop;
-
-    // Watch the entries list. Rebuilds this screen only when entries change.
-    final entriesAsync = ref.watch(moodNotifierProvider);
-    final entries = entriesAsync.value ?? [];
 
     return Scaffold(
       body: SafeArea(
@@ -134,20 +118,7 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
                     const SizedBox(height: MoodSizes.sectionGap),
 
                     // ── History header ───────────────────────────────────────
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Past 7 Entries',
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '${entries.length}/7 logged',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
+                    const HistoryHeader(),
                     const SizedBox(height: 16),
 
                     // ── History strip ────────────────────────────────────────
@@ -156,7 +127,7 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
                           ? MoodSizes.mobileHistoryStripHeight
                           : MoodSizes.desktopHistoryStripHeight,
                       child: MoodHistoryList(
-                        entries: entries,
+                        // entries: entries,
                         isMobile: isMobile,
                         animatedIndexNotifier: _animatedIndexNotifier,
                         onCardTap: _onCardTap,

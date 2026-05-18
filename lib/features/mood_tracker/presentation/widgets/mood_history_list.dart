@@ -1,30 +1,30 @@
-import 'dart:ui';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_tracker/features/mood_tracker/domain/entity/mood_entity.dart';
 import 'package:mood_tracker/constants/mood_colors.dart';
+import 'package:mood_tracker/features/mood_tracker/presentation/riverpod/mood_entries_notifier.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/widgets/mood_history_item.dart';
 
-class MoodHistoryList extends StatefulWidget {
-  final List<MoodEntry> entries;
+class MoodHistoryList extends ConsumerStatefulWidget {
+  // final List<MoodEntry> entries;
   final bool isMobile;
   final ValueNotifier<int?> animatedIndexNotifier;
   final void Function(int index) onCardTap;
 
   const MoodHistoryList({
     super.key,
-    required this.entries,
+    // required this.entries,
     required this.isMobile,
     required this.animatedIndexNotifier,
     required this.onCardTap,
   });
 
   @override
-  State<MoodHistoryList> createState() => _MoodHistoryListState();
+  ConsumerState<MoodHistoryList> createState() => _MoodHistoryListState();
 }
 
-class _MoodHistoryListState extends State<MoodHistoryList> {
+class _MoodHistoryListState extends ConsumerState<MoodHistoryList> {
   late final ScrollController _controller;
 
   // How many logical pixels one wheel tick scrolls. Tune to taste.
@@ -55,7 +55,11 @@ class _MoodHistoryListState extends State<MoodHistoryList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.entries.isEmpty) {
+    // Watch the entries list. Rebuilds this screen only when entries change.
+    final entriesAsync = ref.watch(moodNotifierProvider);
+    final entries = entriesAsync.value ?? [];
+    // if (widget.entries.isEmpty) {
+    if (entries.isEmpty) {
       return const Center(
         child: Text(
           'No entries logged yet!',
@@ -74,10 +78,10 @@ class _MoodHistoryListState extends State<MoodHistoryList> {
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
-          itemCount: widget.entries.length,
+          itemCount: entries.length,
           itemBuilder: (_, index) => MoodHistoryItem(
             index: index,
-            entry: widget.entries[index],
+            entry: entries[index],
             isMobile: widget.isMobile,
             animatedIndexNotifier: widget.animatedIndexNotifier,
             onTap: () => widget.onCardTap(index),
