@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,15 +11,15 @@ import 'package:mood_tracker/features/mood_tracker/presentation/widgets/mood_his
 class MoodHistoryList extends ConsumerStatefulWidget {
   // final List<MoodEntry> entries;
   final bool isMobile;
-  final ValueNotifier<int?> animatedIndexNotifier;
-  final void Function(int index) onCardTap;
+  // final ValueNotifier<int?> animatedIndexNotifier;
+  // final void Function(int index) onCardTap;
 
   const MoodHistoryList({
     super.key,
     // required this.entries,
     required this.isMobile,
-    required this.animatedIndexNotifier,
-    required this.onCardTap,
+    // required this.animatedIndexNotifier,
+    // required this.onCardTap,
   });
 
   @override
@@ -26,6 +28,7 @@ class MoodHistoryList extends ConsumerStatefulWidget {
 
 class _MoodHistoryListState extends ConsumerState<MoodHistoryList> {
   late final ScrollController _controller;
+  final ValueNotifier<int?> _animatedIndexNotifier = ValueNotifier<int?>(null);
 
   // How many logical pixels one wheel tick scrolls. Tune to taste.
   static const double _scrollSpeed = 80.0;
@@ -39,7 +42,18 @@ class _MoodHistoryListState extends ConsumerState<MoodHistoryList> {
   @override
   void dispose() {
     _controller.dispose();
+    _animatedIndexNotifier.dispose();
     super.dispose();
+  }
+
+  void _onCardTap(int index) {
+    _animatedIndexNotifier.value = index;
+    Future.delayed(const Duration(milliseconds: 500), () {
+      // Guard: notifier may have been disposed if the user navigated away.
+      if (_animatedIndexNotifier.value == index) {
+        _animatedIndexNotifier.value = null;
+      }
+    });
   }
 
   void _onPointerSignal(PointerSignalEvent event) {
@@ -58,6 +72,7 @@ class _MoodHistoryListState extends ConsumerState<MoodHistoryList> {
     // Watch the entries list. Rebuilds this screen only when entries change.
     final entriesAsync = ref.watch(moodNotifierProvider);
     final entries = entriesAsync.value ?? [];
+    log('list widget rebuild');
     // if (widget.entries.isEmpty) {
     if (entries.isEmpty) {
       return const Center(
@@ -83,8 +98,11 @@ class _MoodHistoryListState extends ConsumerState<MoodHistoryList> {
             index: index,
             entry: entries[index],
             isMobile: widget.isMobile,
-            animatedIndexNotifier: widget.animatedIndexNotifier,
-            onTap: () => widget.onCardTap(index),
+
+            // animatedIndexNotifier: widget.animatedIndexNotifier,
+            // onTap: () => widget.onCardTap(index),
+            animatedIndexNotifier: _animatedIndexNotifier,
+            onTap: () => _onCardTap(index),
           ),
         ),
       ),

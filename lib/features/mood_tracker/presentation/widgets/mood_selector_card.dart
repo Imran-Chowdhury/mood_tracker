@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_tracker/constants/mood_sizes.dart';
 
 import 'package:mood_tracker/features/mood_tracker/domain/enums/mood_type.dart';
 import 'package:mood_tracker/constants/mood_colors.dart';
 import 'package:mood_tracker/constants/mood_configs.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/painter/mood_face_painter.dart';
+import 'package:mood_tracker/features/mood_tracker/presentation/riverpod/mood_entries_notifier.dart';
 
-class MoodSelectorCard extends StatelessWidget {
+class MoodSelectorCard extends ConsumerWidget {
   final MoodType mood;
   final bool isHorizontalScroll;
-  final VoidCallback onTap;
+  // final VoidCallback onTap;
 
   const MoodSelectorCard({
     super.key,
     required this.mood,
     required this.isHorizontalScroll,
-    required this.onTap,
+    // required this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final config = moodDisplayConfigs[mood]!;
 
     return GestureDetector(
-      onTap: onTap,
+      // onTap: onTap,
+      onTap: () => ref.read(moodNotifierProvider.notifier).addEntry(mood),
       child: Container(
         width: isHorizontalScroll ? MoodSizes.selectorCardWidth : null,
         margin: isHorizontalScroll

@@ -1,41 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mood_tracker/constants/mood_sizes.dart';
 import 'package:mood_tracker/features/mood_tracker/domain/enums/mood_type.dart';
-import 'package:mood_tracker/features/mood_tracker/presentation/riverpod/mood_entries_notifier.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/widgets/history_header.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/widgets/mood_history_list.dart';
 import 'package:mood_tracker/features/mood_tracker/presentation/widgets/mood_selector_card.dart';
 
-class MoodTrackerScreen extends ConsumerStatefulWidget {
+class MoodTrackerScreen extends StatelessWidget {
   const MoodTrackerScreen({super.key});
-
-  @override
-  ConsumerState<MoodTrackerScreen> createState() => _MoodTrackerScreenState();
-}
-
-class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
-  final ValueNotifier<int?> _animatedIndexNotifier = ValueNotifier<int?>(null);
-
-  @override
-  void dispose() {
-    _animatedIndexNotifier.dispose();
-    super.dispose();
-  }
-
-  void _onCardTap(int index) {
-    _animatedIndexNotifier.value = index;
-    Future.delayed(const Duration(milliseconds: 500), () {
-      // Guard: notifier may have been disposed if the user navigated away.
-      if (_animatedIndexNotifier.value == index) {
-        _animatedIndexNotifier.value = null;
-      }
-    });
-  }
-
-  void _onMoodSelected(MoodType mood) {
-    ref.read(moodNotifierProvider.notifier).addEntry(mood);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +18,6 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
 
     return Scaffold(
       body: SafeArea(
-        // SingleChildScrollView prevents overflow on very small / landscape screens.
         child: SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
@@ -88,7 +58,7 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
                                     (mood) => MoodSelectorCard(
                                       mood: mood,
                                       isHorizontalScroll: true,
-                                      onTap: () => _onMoodSelected(mood),
+                                      // onTap: () => _onMoodSelected(mood),
                                     ),
                                   )
                                   .toList(),
@@ -109,7 +79,7 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
                                   (mood) => MoodSelectorCard(
                                     mood: mood,
                                     isHorizontalScroll: false,
-                                    onTap: () => _onMoodSelected(mood),
+                                    // onTap: () => _onMoodSelected(mood),
                                   ),
                                 )
                                 .toList(),
@@ -129,8 +99,8 @@ class _MoodTrackerScreenState extends ConsumerState<MoodTrackerScreen> {
                       child: MoodHistoryList(
                         // entries: entries,
                         isMobile: isMobile,
-                        animatedIndexNotifier: _animatedIndexNotifier,
-                        onCardTap: _onCardTap,
+                        // animatedIndexNotifier: _animatedIndexNotifier,
+                        // onCardTap: _onCardTap,
                       ),
                     ),
 
